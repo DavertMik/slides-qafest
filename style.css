@@ -45,3 +45,13 @@ body .reveal a {
 body .reveal table {
   font-size: 0.6em;
 }
+
+body .reveal img {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+body .reveal ul {
+  line-height: 2;
+}
