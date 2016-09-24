@@ -55,7 +55,7 @@ $I->dontSeeLink('Signup');
 
 ### Мы это исправили!
 
-![](/img/yiimeetup_photo.jpg)
+![](img/yiimeetup_photo.jpg)
 
 ---
 
@@ -71,4 +71,4 @@ $I->dontSeeLink('Signup');
 
 codeception.com/for/yii
 
-![](/img/yii_for.png)
+![](img/yii_for.png)
