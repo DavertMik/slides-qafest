@@ -1,4 +1,5 @@
+# Modern Testing With Codeception
 
-## Эффективное тестирование с Codeception
+### Tips & Tricks
 
-Yii2 Conference
+BGPHP 2016

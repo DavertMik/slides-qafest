@@ -1,5 +1,5 @@
-## Структура Теста
+## Structure of a test
 
-* условие
-* действие
-* проверка (assertion)
+* initial condition
+* action
+* assertion

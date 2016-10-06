@@ -3,13 +3,9 @@
     "me.md",
     "introduction.md",
     "auto.md",
-    "pyramid.md",
-    "structure.md",
-    "practices.md",
     "what-to-test.md",
-    "price.md",        
     "codeception.md",
-    "yii-issues.md",
+    "codeception-bad-practices.md",
     "codeception-best-practices.md",
     "questions.md"
 ]
