@@ -33,22 +33,30 @@
 
 ![](img/codeception.gif)
 
+via [@polevaultweb](https://deliciousbrains.com/codeception-automate-wordpress-plugin-testing/)
+
 ---
 
 ## Example
 
 ```php
-$I->amOnPage('/login');
-// filling form element by label
-$I->fillField('Username', 'notauser');
-$I->fillField('Password', 'kitten');
-// clickin button by text
-$I->click('Sign in');
-// wait ajax-loading indicator to hide
-$I->waitForElementNotVisible('#loading');
-// do assertion
-$I->see('Invalid credentials', '.alert');
+// Custom method
+$I->loginAsAdmin();
+// Navigate to the Media Library
+$I->amOnPage( '/wp-admin/media-new.php' );
+$I->waitForText( 'Upload New Media' );
+
+// Add new file
+$I->attachFile( 'input[type="file"]', 'team.jpg' );
+
+// Wait for upload
+$I->waitForElement( '.edit-attachment', 20 );
+
+// Assertion
+$I->see( 'Edit Media' );
 ```
+
+via [@polevaultweb](https://deliciousbrains.com/codeception-automate-wordpress-plugin-testing/)
 
 ---
 

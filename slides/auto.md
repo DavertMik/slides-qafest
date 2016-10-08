@@ -11,12 +11,3 @@
 ---
 
 ![](img/pros-cons.svg)
-
----
-
-## Domain Testing vs UI Testing
-
-How to prioritize them?
-
-**Software automates business** VS **Software is a business**
-
