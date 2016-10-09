@@ -31,13 +31,7 @@
 
 ---
 
-![](img/codeception.gif)
-
-via [@polevaultweb](https://deliciousbrains.com/codeception-automate-wordpress-plugin-testing/)
-
----
-
-## Example
+### Selenium Webdriver Example
 
 ```php
 // Custom method
@@ -55,6 +49,13 @@ $I->waitForElement( '.edit-attachment', 20 );
 // Assertion
 $I->see( 'Edit Media' );
 ```
+
+via [@polevaultweb](https://deliciousbrains.com/codeception-automate-wordpress-plugin-testing/)
+
+---
+
+
+![](img/codeception.gif)
 
 via [@polevaultweb](https://deliciousbrains.com/codeception-automate-wordpress-plugin-testing/)
 
@@ -165,6 +166,7 @@ GET /api/tickets/3
 ---
 
 ```php
+$I->wantTo('get a ticket by its id');
 $I->sendGET('/api/tickets/3');
 $I->seeResponseCodeIs(HttpCode::OK); // 200
 $I->seeResponseIsJson();
@@ -200,21 +202,7 @@ $I->seeResponseMatchesJsonType([
 
 ---
 
-```php
-// check existence of element
-$I->seeResponseJsonMatchesJsonPath(
-  '$ticket.report.url'
-);
-// via XPath too
-$I->seeResponseJsonMatchesXpath(
-  '//ticket/report/url'
-);
-
-```
-
----
-
-## BDD Features
+## BDD Tests
 
 * Business specifications written by examples
 * Example scenarios in plain English (Cucumber, Behat)
@@ -241,11 +229,3 @@ Feature: content
     And I save an article
     Then I should see the "Article successfully saved." message
 ```
-
----
-
-## Tests != Features
-
-* Features written for business-team communication
-* Features are happy path tests
-* Features ⊂ Tests

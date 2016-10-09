@@ -72,6 +72,16 @@ public function viewTask(AcceptanceTester $I,
 
 ---
 
+### Click element in a row
+
+```php
+$I->click('Edit', Locator::elementAt('#data-grid tr', 3));
+```
+
+![](img/grid.png)
+
+---
+
 ## Codeception\Util\Locator
 
 * Locate element with text inside
@@ -80,13 +90,14 @@ public function viewTask(AcceptanceTester $I,
 Locator::contains('div[contenteditable]',  'hello world');
 ```
 
-* Select nth element (row, column in a table)
+* Combine different selectors
 
 ```php
-Locator::elementAt('#data-grid', 2);
+$I->see('Title', Locator::combine('h1','h2','h3'));
+
 ```
 
-* and others http://codeception.com/docs/reference/Locator
+* [and others](http://codeception.com/docs/reference/Locator)
 
 ---
 
