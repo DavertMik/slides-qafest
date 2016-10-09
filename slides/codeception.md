@@ -100,7 +100,7 @@ $I->seeRecord('common\models\Task', [
 
 ---
 
-### Integration Tests
+## Integration Tests
 
 * PHPUnit tests enhanced with Codeception modules
 * Tests integration between components and external services

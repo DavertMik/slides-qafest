@@ -9,4 +9,5 @@
 ## Thank you
 
 * Michael Bodnarchuk @davert
+* Rate this talk **https://joind.in/talk/071e9**
 * http://codeception
