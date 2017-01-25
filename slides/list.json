@@ -3,9 +3,10 @@
     "me.md",
     "introduction.md",
     "auto.md",
-    "what-to-test.md",
     "codeception.md",
+    { "filename": "tutorial.md", "attr": 
+      { "data-background": "#eee", "data-separator-vertical": "\n\n\n" }
+    },
     "codeception-bad-practices.md",
-    "codeception-best-practices.md",
     "questions.md"
 ]

@@ -1,13 +1,6 @@
 ## Conclusion
 
-* Codeception is a full stack testing framework
-* Designed to do all routine stuff for you
-* Works good with Symfony/Laravel/ZF/Wordpress...
-
----
-
-## Thank you
-
-* Michael Bodnarchuk @davert
-* Rate this talk **https://joind.in/talk/071e9**
-* http://codeception
+* Codeception helps to automate browser testing
+* Codeception is easy to extend with Actors, Page Objects, Helpers
+* WebDriver is protocol, there are lots of tools to start browser
+* Developers can improve work of test automation engineers

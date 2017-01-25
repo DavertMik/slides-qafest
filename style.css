@@ -1,7 +1,6 @@
 body .reveal h1 {
   font-family: 'Yantramanav';
   font-weight: bold;
-  text-shadow: 0px 2px 2px #333;
 }
 
 body .reveal h1 {
@@ -13,33 +12,25 @@ body .reveal h2 {
   font-family: 'Yantramanav';
   font-size: 1.11em;
   font-weight: bold; 
-  color: #f1c40f;
-  text-shadow: 0px 2px 2px #333;
 }
 
 body .reveal h3 {
   font-family: 'Yantramanav';
   font-weight: bold; 
   font-size: 1em; 
-  color: #fff;
-  text-shadow: 0px 2px 2px #333;
 }
 
 body .reveal h4 {
   font-family: 'Yantramanav';  
   font-weight: bold; 
   font-size: 0.9em; 
-  color: #fff;  
-  text-shadow: 0px 2px 2px #333;
 }
 
 body .reveal {
-  color: white;
   font-family: 'Yantramanav';
 }
 
 body .reveal a {
- color: #eee;
  text-decoration: underline; 
 }
 
@@ -54,5 +45,11 @@ body .reveal img {
 }
 
 body .reveal ul {
-  line-height: 2;
+  line-height: 1.5;
+}
+
+body .reveal li>code, body .reveal p>code {
+  font-size: 0.7em;
+  font-weight: bold;
+  background: #fff;
 }

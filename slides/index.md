@@ -1,5 +1,5 @@
-# Modern Testing With Codeception
+# BROWSER TESTING WIZARDRY 
 
-### Tips & Tricks
+### WITH CODECEPTION
 
-BGPHP 2016
+2017
