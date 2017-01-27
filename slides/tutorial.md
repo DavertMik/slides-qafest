@@ -9,7 +9,7 @@
 1. Dealing with JavaScript (selectize, angular, vue.js)
 1. Using Recorder Extension
 1. Page Object pattern
-1. Manging data with API
+1. Learn about managing data
 
 ---
 
@@ -231,8 +231,7 @@ public function createTask(AcceptanceTester $I)
 
 * Move login logic to `_before()`
 * Add `changePriority` test
-* Add `Edit Title Task` Test
-* Add `Delete Task` Test
+* Add `deleteTask` Test
 
 ---
 
@@ -314,29 +313,141 @@ And run the tests!
 Using Page Objects
 
 ```
-./vendor/bin/codecept g:pageobject Project
-./vendor/bin/codecept g:pageobject Popup
+./vendor/bin/codecept g:page Project
 ```
 
 
 ### Reusing Test Code
 
-* Helpers - implement custom steps (native WebDriver API)
+* Helpers - implement custom steps ([facebook/webDriver]() API)
 * Actor - group common steps into actions
 * PageObject - group common actions for a page
 
 
+#### Helper
+
+* Located in `tests/_support/Helper`
+* Custom modules (can extend Codeception Modules)
+* When Codeception Modules are not enough
+
+
+#### Actor
+
+* represents `$I`
+* located in `tests/_support` 
+* for acceptance tests it is **AcceptanceTester**
+* includes proxy methods for modules (`tests/_support/_generated`)
+* includes custom actions
+
 
 ```php
-public function testDeleteTask(AcceptanceTester $I, \Page\ProjectPage $project_page)
+class AcceptanceTester extends \Codeception\Actor
 {
-    $task_name = $project_page->addNewTask($this->project_name);
-    $I->moveMouseOver($project_page::TASK_CONTENT_CSS);
-    $I->seeElement($project_page::TASK_DELETE_BUTTON_CSS);
-    $I->click($project_page::TASK_DELETE_BUTTON_CSS);
-    $I->waitForElementVisible($project_page::TASK_DELETE_CONF_POPUP_CSS);
-    $I->click($project_page::TASK_DELETE_CONFIRM_BUTTON_CSS);
-    $I->waitForElementNotVisible($project_page::TASK_DELETE_CONF_POPUP_CSS);
-    $I->dontSee($task_name);
+    // proxy method to modules
+    use _generated\AcceptanceTesterActions;
+
+    public function logIn()
+    {
+        $this->amOnPage('/login');
+        $this->submitForm('.special-form form', [
+            'email' => 'admin@admin.com',
+            'password' => 'adminsadmins'
+        ]);
+    }
+}
+```
+
+
+#### PageObjects
+
+* represent a page on a site
+* contains locators (elements) of a page
+* contains scenarios can be done on a page 
+
+
+
+```php
+namespace Page\Acceptance;
+
+class Project
+{
+    // inject $I
+    public function __construct(\AcceptanceTester $I)
+    {
+        $this->acceptanceTester = $I;
+    }
+
+    // locators
+    public $taskList = '.task-list';
+
+    // data
+    public $defaultData = ['title' => 'taskXXX'];
+
+    // logic
+    public function createNewTask($projectId, $data = [])
+    {
+      // ....
+    }
+}
+```
+
+
+## Delete Task Refactored
+
+* use PageObject to create new task
+* stpore locators in PageObject
+* store default data in PageObject
+* implement method to get dynamic locators
+
+
+
+```php
+/**
+ * @depends createTask
+ */
+public function deleteTask(AcceptanceTester $I, \Page\ProjectPage $project)
+{
+    $taskName = $project->addNewTask(2);
+    $taskCSS = $project->getTaskElementCSS($taskName);
+    $I->moveMouseOver($taskCSS);
+    $I->seeElement("$taskCSS {$project->deleteButton}");
+    $I->click("$taskCSS {$project->deleteButton}");
+    $I->waitForElementVisible($project->popup);
+    $I->click($project->popupConfirmButton);
+    $I->waitForElementNotVisible($project->popup);
+    $I->dontSee($taskName);
+}
+```
+
+
+## Get Task ID from a Page
+
+```php
+public function getTaskElementCSS($taskName)
+{
+    $class = $this->acceptanceTester->grabAttributeFrom(
+      Locator::contains($this.taskList . ' li', $title), 
+      'class');
+
+    if (preg_match('~task-(\d+?)~', $class, $matches)) {
+        codecept_debug('Task Id: ' . $matches[1]);
+        return $matches[1];
+    }
+    return null;
+}
+```
+
+
+## Hide Implementation Complexity
+
+```php
+/**
+ * @depends createTask
+ */
+public function deleteTask(AcceptanceTester $I, \Page\ProjectPage $project)
+{
+    $taskName = $project->addNewTask($this->currentProject);
+    $projectPage->deleteTask($taskName);
+    $I->dontSee($taskName);
 }
 ```

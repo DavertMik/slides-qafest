@@ -1,6 +1,7 @@
+
 # Bad Practices
 
----
+
 
 ## Long-Long-Scenarios
 
@@ -20,7 +21,7 @@ $I->expectTo('see user info');
 $I->see('Logout (admin)');
 ```
 
----
+
 
 ## Solution
 
@@ -29,7 +30,7 @@ $I->see('Logout (admin)');
 * CRUD is 4 tests, not one
 * **Don't use Cept format**
 
----
+
 
 ## Universal Test
 
@@ -44,7 +45,7 @@ $I->dontSeeLink('Signup');
  */
 ```
 
----
+
 
 ## Solution
 
@@ -52,7 +53,7 @@ $I->dontSeeLink('Signup');
 * Despite of similar modules those tests are different.
 * Use acceptance testing for happy path scenarios
 
----
+
 
 ## Support code inside test
 
@@ -70,7 +71,7 @@ $I->click('Menu');
 // .....
 ```
 
----
+
 
 ## Solution
 
