@@ -1,11 +1,11 @@
-# BROWSER TESTING WIZARDRY
+## ATDD & CodeceptJS
 
-## WITH CODECEPTION
+### Effective Testing Without Pain
 
-![](http://codeception.com/images/logo.svg)
-
-
-davertmik.github.io/benelux-tutorial
+<img src="img/qa_fest_logo_555px.png" alt="" style="width: 30%">
 
 
-2017
+by Michael Bodnarchuk
+
+
+2018

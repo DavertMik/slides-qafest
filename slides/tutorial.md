@@ -20,9 +20,9 @@ Project: Ribbon https://github.com/DavertMik/ribbbon
 #### Install Project & Run Server
 
 ```
-git clone git@github.com:davertmik/ribbbon.git
+git clone https://github.com/DavertMik/ribbbon.git
 cd ribbon
-composer install
+composer update
 cp .env.example .env
 ```
 
@@ -93,41 +93,20 @@ https://localhost:8000
 * projects
 * tasks
 
----
 
-
-## Selenium WebDriver
-
-* **WebDriver** is a protocol for browser control
-* **Selenium** is a API server to manage browsers via WebDriver
-* **ChromeDriver**, **MarionetteDriver** - drivers for browsers
-* **SauceLabs, BrowserStack** - remote WebDriver servers
-* **PhantomJS** chrome-based headless browser implementing WebDriver protocol
-
-
-![](img/webdriver-chart.jpg)
-
-
-## How to run browsers
-
-* Window Mode
- - via Selenium Server
- - via ChromeDriver, MarionetteDriver
-* Headless Mode
- - via Docker
- - with Xvfb (virtual framebuffer)
- - PhantomJS
-* Remotely
- - cloud testing providers
-
-
-### Start Selenium
+### Prepare Selenium
 
 **Download**: http://www.seleniumhq.org/download/
 
+**Download** ChromeDriver: https://sites.google.com/a/chromium.org/chromedriver/downloads
+
+for MacOS: `brew install chromedriver`
+
+--- 
+Start:
+
 ```
-wget https://goo.gl/Lyo36k
-java -jar selenium-server-standalone-3.0.1.jar 
+java -jar selenium-server-standalone-3.x.x.jar 
 ```
 
 ***
@@ -135,7 +114,7 @@ java -jar selenium-server-standalone-3.0.1.jar
 or headlessly, using Docker:
 
 ```
-docker run --net=host selenium/standalone-chrome:3.0.1 
+docker run --net=host selenium/standalone-chrome:3.x.x 
 ```
 
 (optionally)
@@ -172,6 +151,7 @@ class TaskCest
     public function createTask(AcceptanceTester $I)
     {
         $I->amOnPage('/projects/2');
+        $I->click('New Task');        
         $I->seeElement('.new-task');
     }
 }
@@ -179,12 +159,19 @@ class TaskCest
 
 
 * Find which elements are needed to create a task
-* Find how to locate those elements. By
- * CSS *(most common)*
- * XPath *(most powerful)*
- * Field Names *(most stable)*
- * Field Labels *(most readable)*
+* Find how to locate those elements.
 * What is expected result?
+
+
+### Locators
+
+|      |     |
+|---|---|
+| CSS | `$I->seeElement('.new-task')` |
+| XPath | `$I->seeElement('//table/tr/td[2]')` |
+| Fuzzy | `$I->click('Hello')` |
+| Strict | `$I->click(['xpath' => '//nav/a[2]']);` |
+
 
 
 ```php
@@ -223,6 +210,23 @@ public function createTask(AcceptanceTester $I)
     $I->waitForElementNotVisible('.new-task');
     $I->see('Please fix that', '.task-list');
 }
+```
+
+---
+
+## Running Chrome Headlessly
+
+Update `acceptance.suite.yml`
+
+```
+modules:
+    enabled:
+        - WebDriver:
+            url: http://127.0.0.1:8000
+            browser: chrome
+            capabilities:
+              chromeOptions:
+                args: ["--headless", "--disable-gpu"]
 ```
 
 ---
@@ -384,7 +388,7 @@ class Project
     public $defaultData = ['title' => 'taskXXX'];
 
     // logic
-    public function createNewTask($projectId, $data = [])
+    public function createNewTask($title, $description, $priotity = null)
     {
       // ....
     }
@@ -408,10 +412,10 @@ class Project
 public function deleteTask(AcceptanceTester $I, \Page\ProjectPage $project)
 {
     $taskName = $project->addNewTask(2);
-    $taskCSS = $project->getTaskElementCSS($taskName);
-    $I->moveMouseOver($taskCSS);
-    $I->seeElement("$taskCSS {$project->deleteButton}");
-    $I->click("$taskCSS {$project->deleteButton}");
+    $taskElement = $project->getTaskElement($taskName);
+    $I->moveMouseOver($taskElement);
+    $I->seeElement("$taskElement {$project->deleteButton}");
+    $I->click("$taskElement {$project->deleteButton}");
     $I->waitForElementVisible($project->popup);
     $I->click($project->popupConfirmButton);
     $I->waitForElementNotVisible($project->popup);
@@ -423,10 +427,10 @@ public function deleteTask(AcceptanceTester $I, \Page\ProjectPage $project)
 ## Get Task ID from a Page
 
 ```php
-public function getTaskElementCSS($taskName)
+public function getTaskElement($taskName)
 {
     $class = $this->acceptanceTester->grabAttributeFrom(
-      Locator::contains($this.taskList . ' li', $title), 
+      Locator::contains($this->taskList . ' li', $taskName), 
       'class');
 
     if (preg_match('~task-(\d+?)~', $class, $matches)) {
@@ -451,3 +455,208 @@ public function deleteTask(AcceptanceTester $I, \Page\ProjectPage $project)
     $I->dontSee($taskName);
 }
 ```
+
+---
+
+## Lifehacks
+
+
+### Codeception\Util\Locator
+
+* `combine` - merge 2 locators
+* `contains` - element that contains test
+* `elementAt` - get nth element in scope
+* `firstElement` - get the first element in scope
+* `find` - get element by locator and attributes
+* `href` - get link by href
+* `lastElement` - get last element in scope
+* `tabIndex` - get element by tab position
+
+
+### Element At Position
+
+
+```php
+$I->click('Edit', Locator::elementAt('#data-grid tr', 3));
+```
+
+![](img/grid.png)
+
+
+## Other Locators
+
+* Locate element with text inside
+
+```php
+Locator::contains('div[contenteditable]',  'hello world');
+```
+
+* Combine different selectors
+
+```php
+$I->see('Title', Locator::combine('h1','h2','h3'));
+
+```
+
+* [and more](http://codeception.com/docs/reference/Locator)
+
+---
+
+## Session Snapshots
+
+Don't login for each test
+
+```php
+if ($I->loadSessionSnapshot('login')) {
+    return;
+} // logged in
+$I->amOnPage('/login');
+$I->submitForm('#loginForm', [
+    'login' => $name, 
+    'password' => $password
+]);
+// saving snapshot
+$I->saveSessionSnapshot('login');
+
+```
+
+---
+
+
+### Wait For Elements
+
+* waitForElement
+* smartWait
+* performOn
+
+
+### SmartWait
+
+* works with Id/CSS/XPath/Strict locators
+* replaces `waitForElement`
+* add `wait: 5` to config
+* doesn't work with fuzzy locators
+
+---
+
+### Multi-Session Testing
+
+```php
+$joe = $I->haveFriend('joe');
+$joe->does(function($I) {
+   $I->amOnPage('/'); 
+});
+```
+
+---
+
+## Data Management
+
+* Using Laravel ORM (private)
+* Using DB module (private)
+* Using REST API (public)
+
+
+#### Practice: Create Client and Project for tests
+
+Add REST+PhpBrowser to modules list
+
+```yaml
+- REST:
+    depends: PhpBrowser
+    url: 'http://127.0.0.1:8000'
+```
+
+* Use `$I->sendPOST()` to send requests to API
+* Use `$I->sendPOST('/login', [])` to login
+
+
+* Implement `haveClient` method using REST API in AcceptanceTester
+* Implement `haveProject` method using REST API in AcceptanceTester
+
+
+```php
+public function haveClient($name)
+{
+    $this->sendPOST('/login', [
+        'email' => 'admin@admin.com',
+        'password' => '123456789'
+    ]);
+    $this->sendPOST('/api/clients', ['user_id' => 1, 'name' => $name]);
+    $this->seeResponseCodeIs(200);
+}
+```
+
+
+### Cleanup
+
+* move `haveClient`, `haveProject` to `\Helper\Acceptance`
+* use `_after` hook to cleanup the created instances
+
+---
+
+## Selenium Limitations
+
+* Download 
+* Receiving Emails (use [MailCatcher](https://github.com/captbaritone/codeception-mailcatcher-module) instead)
+* Headers
+
+---
+
+## Codeception Limitations
+
+* Not everything from Webdriver is implemented
+* Implement complex actions using WebDriver protocol
+
+
+### Implementing Custom Drag&Drop
+
+Follow [Java Example](https://stackoverflow.com/questions/14210051/how-to-automate-drag-drop-functionality-using-selenium-webdriver-java)
+
+```java
+Actions builder = new Actions(driver);
+
+builder.keyDown(Keys.CONTROL)
+   .click(someElement)
+   .click(someOtherElement)
+   .keyUp(Keys.CONTROL);
+```
+
+
+Add to `_support\Helper\Acceptance`:
+
+```php
+public function myDragAndDrop($from, $to)
+{
+    // locating webdriver element (first)
+    $fromEl = $this->getModule('WebDriver')->_findElements($from)[0];
+    $toEl = $this->getModule('WebDriver')->_findElements($to)[0];
+    /** @var $webdriver \Facebook\WebDriver\Remote\RemoteWebDriver  **/
+    $webdriver = $this->getModule('WebDriver')->webDriver;
+    $actions = new WebDriverActions($webdriver);
+    $actions->keyDown(WebDriverKeys::CONTROL)
+        ->click($fromEl)
+        ->click($toEl)
+        ->keyUp(WebDriverKeys::CONTROL)
+        ->perform();
+}
+```
+
+---
+
+## Practice: Test TodoMVC application
+
+http://todomvc.com/examples/react/#/
+
+
+### Tasks
+
+* create todo
+* edit todo
+* delete todo
+* clear completed
+* filter todos
+
+---
+
+### Free Ride

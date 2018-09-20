@@ -1,5 +1,10 @@
+body {
+  background: #17a3ae;
+  background-color: #17a3ae;
+}
+
 body .reveal h1 {
-  font-family: 'Yantramanav';
+  font-family: 'Kreon', serif;
   font-weight: bold;
 }
 
@@ -9,25 +14,31 @@ body .reveal h1 {
 }
 
 body .reveal h2 {
-  font-family: 'Yantramanav';
+  font-family: 'Kreon', serif;
   font-size: 1.11em;
   font-weight: bold; 
 }
 
 body .reveal h3 {
-  font-family: 'Yantramanav';
+  font-family: 'Kreon', serif;
   font-weight: bold; 
   font-size: 1em; 
 }
 
 body .reveal h4 {
-  font-family: 'Yantramanav';  
+  font-family: 'Kreon', serif;  
   font-weight: bold; 
   font-size: 0.9em; 
 }
 
 body .reveal {
-  font-family: 'Yantramanav';
+  font-family: 'Yanone Kaffeesatz';
+}
+
+body .reveal .slides {
+  background: #fff;
+      font-size: 110%;
+  box-shadow: 10px 3px 40px #aaa;
 }
 
 body .reveal a {
@@ -46,6 +57,11 @@ body .reveal img {
 
 body .reveal ul {
   line-height: 1.5;
+}
+
+body .reveal pre code {
+  background: #F5F5F5;
+  color: #1d2a3a;  
 }
 
 body .reveal li>code, body .reveal p>code {

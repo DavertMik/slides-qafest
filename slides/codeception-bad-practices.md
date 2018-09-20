@@ -28,7 +28,6 @@ $I->see('Logout (admin)');
 * Tests should be atomic
 * One feature per tests
 * CRUD is 4 tests, not one
-* **Don't use Cept format**
 
 
 
@@ -58,7 +57,7 @@ $I->dontSeeLink('Signup');
 ## Support code inside test
 
 ```php
-$actualUrl = $I->executeJS("return location.href");
+$actualUrl = $I->grabCurrentUrl();
 
 // conditionals inside tests are bad as well..
 if ($actualUrl == $stagingServer) {

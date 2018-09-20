@@ -1,14 +1,7 @@
 [
     "index.md",
     "me.md",
-    "introduction.md",
-    "auto.md",
-    "codeception.md",
-    { "filename": "tutorial.md", "attr": 
-      { "data-background": "#eee", "data-separator-vertical": "\n\n\n" }
-    },
-    { "filename": "codeception-bad-practices.md", "attr": 
-      { "data-separator-vertical": "\n\n\n" }
-    },    
-    "questions.md"
+    "web.md",
+    "atdd.md",
+    "codeceptjs.md"
 ]
